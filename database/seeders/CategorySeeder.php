@@ -12,14 +12,16 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-
+        
         $name =['Smartfonlar','Tv-audio','Məişət Texnikası','Notbuklar','Smart Saatlar','Musiqi Alətləri'];
 
         foreach($name as $value){
-
+        
             DB::table('category')->insert([
                'category_name'=>$value,
-               'slug'=>strtolower($value)
+               'slug'=>strtolower($value),
+               'created_at'=>now(),
+               'updated_at'=>now()
             ]);
 
         }
