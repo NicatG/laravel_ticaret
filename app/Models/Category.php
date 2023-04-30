@@ -22,6 +22,9 @@ class Category extends Model
         //nicat
         //racay
         //Ruslan
+        //racay
+        //racay
+
 
     }
 
