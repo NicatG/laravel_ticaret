@@ -1,0 +1,180 @@
+[1mdiff --git a/app/Http/Controllers/CategoryController.php b/app/Http/Controllers/CategoryController.php[m
+[1mindex 4ed2509..babbf40 100644[m
+[1m--- a/app/Http/Controllers/CategoryController.php[m
+[1m+++ b/app/Http/Controllers/CategoryController.php[m
+[36m@@ -9,8 +9,10 @@[m [mclass CategoryController extends Controller[m
+ {[m
+     public function index($parent_id){[m
+ [m
+[31m-        $category=Category::where('id',$parent_id)->orWhere('parent_id',$parent_id)->get();[m
+[32m+[m[32m        $category=Category::where('id',$parent_id)->get();[m
+         $subCategory=Category::where('parent_id',$parent_id)->get();[m
+[32m+[m[41m        [m
+[32m+[m[32m        $products=$category->products;[m
+ [m
+         return view('Frontend/Category',compact('subCategory','category'));[m
+     }[m
+[1mdiff --git a/app/Models/Category.php b/app/Models/Category.php[m
+[1mindex 592c477..bd83e6c 100644[m
+[1m--- a/app/Models/Category.php[m
+[1m+++ b/app/Models/Category.php[m
+[36m@@ -14,4 +14,13 @@[m [mclass Category extends Model[m
+     // const update_at='yenilenme tarixi' bazada az-tr dilinde field adi yazanda onu laravel ucun tanitmaq lazim olanda istifadeedirik[m
+     protected $guarded=[]; // bazaya hansisa fielda melumat yazdirmaq istemeyende ve ya qorunaya almaq isteyende[m
+     [m
+[32m+[m
+[32m+[m[32m    public function products(){[m
+[32m+[m
+[32m+[m
+[32m+[m[32m        return $this->belongsToMany('App\Models\Product','product_name');[m
+[32m+[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m
+ }[m
+[1mdiff --git a/app/Models/Product.php b/app/Models/Product.php[m
+[1mindex e69de29..167d4d4 100644[m
+[1m--- a/app/Models/Product.php[m
+[1m+++ b/app/Models/Product.php[m
+[36m@@ -0,0 +1,14 @@[m
+[32m+[m[32m<?php[m
+[32m+[m
+[32m+[m[32mnamespace App\Models;[m
+[32m+[m
+[32m+[m[32muse Illuminate\Database\Eloquent\Factories\HasFactory;[m
+[32m+[m[32muse Illuminate\Database\Eloquent\Model;[m
+[32m+[m
+[32m+[m[32mclass Product extends Model[m
+[32m+[m[32m{[m
+[32m+[m[32m    use HasFactory;[m
+[32m+[m[32m    use SoftDeletes;[m
+[32m+[m
+[32m+[m[32m    protected $table ='product';[m
+[32m+[m[32m}[m
+[1mdiff --git a/database/migrations/2023_04_24_194336_create_product_table.php b/database/migrations/2023_04_24_194336_create_product_table.php[m
+[1mindex 6e5b13a..7e3883b 100644[m
+[1m--- a/database/migrations/2023_04_24_194336_create_product_table.php[m
+[1m+++ b/database/migrations/2023_04_24_194336_create_product_table.php[m
+[36m@@ -4,7 +4,6 @@[m
+ use Illuminate\Database\Schema\Blueprint;[m
+ use Illuminate\Support\Facades\Schema;[m
+ [m
+[31m-[m
+ return new class extends Migration[m
+ {[m
+     /**[m
+[36m@@ -12,11 +11,14 @@[m
+      */[m
+     public function up(): void[m
+     {[m
+[31m-[m
+         Schema::create('product', function (Blueprint $table) {[m
+             $table->id();[m
+[31m-            $table->[m
+[32m+[m[32m            $table->string('slug',160);[m
+[32m+[m[32m            $table->string('product_name',160);[m
+[32m+[m[32m            $table->text('description');[m
+[32m+[m[32m            $table->decimal('price',6,3)->nullable();[m
+             $table->timestamps();[m
+[32m+[m[32m            $table->SoftDeletes()->nullable();[m
+         });[m
+     }[m
+ [m
+[1mdiff --git a/database/seeders/CategorySeeder.php b/database/seeders/CategorySeeder.php[m
+[1mindex dd4fefc..1a44947 100644[m
+[1m--- a/database/seeders/CategorySeeder.php[m
+[1m+++ b/database/seeders/CategorySeeder.php[m
+[36m@@ -6,25 +6,40 @@[m
+ use Illuminate\Database\Seeder;[m
+ use Illuminate\Support\Facades\DB;[m
+ class CategorySeeder extends Seeder[m
+[32m+[m
+ {[m
+     /**[m
+      * Run the database seeds.[m
+      */[m
+     public function run(): void[m
+[31m-    {[m
+[32m+[m[32m    {[m[41m [m
+         [m
+[31m-        $name =['Smartfonlar','Tv-audio','Məişət Texnikası','Notbuklar','Smart Saatlar','Musiqi Alətləri'];[m
+[32m+[m[32m        DB::table('category')->truncate();[m
+ [m
+[31m-        foreach($name as $value){[m
+[32m+[m[32m        $name =['Smartfonlar','Tv-audio','Məişət Texnikası','Notbuklar','Smart Saatlar','Musiqi Alətləri'];[m
+[32m+[m[32m        $subcategory=['Samsung','Xiaomi','Iphone','Huawei'];[m
+         [m
+[32m+[m[41m       [m
+[32m+[m[32m        foreach($name as $value){[m
+[32m+[m
+             DB::table('category')->insert([[m
+                'category_name'=>$value,[m
+                'slug'=>strtolower($value),[m
+[31m-               'created_at'=>now(),[m
+[31m-               'updated_at'=>now()[m
+[32m+[m[32m               'created_at'=>now()[m
+             ]);[m
+ [m
+[31m-        }[m
+[32m+[m[41m            [m
+         [m
+     }[m
+[32m+[m[32m    foreach($subcategory as $value){[m
+[32m+[m
+[32m+[m[32m        DB::table('category')->insert([[m
+[32m+[m[32m           'category_name'=>$value,[m
+[32m+[m[32m           'slug'=>strtolower($value),[m
+[32m+[m[32m           'parent_id'=>1,[m
+[32m+[m[32m           'created_at'=>now()[m
+[32m+[m[32m        ]);[m
+[32m+[m
+[32m+[m[32m}[m
+ }[m
+[32m+[m[32m}[m
+\ No newline at end of file[m
+[1mdiff --git a/database/seeders/ProductSeeder.php b/database/seeders/ProductSeeder.php[m
+[1mindex e69de29..94bdeaa 100644[m
+[1m--- a/database/seeders/ProductSeeder.php[m
+[1m+++ b/database/seeders/ProductSeeder.php[m
+[36m@@ -0,0 +1,41 @@[m
+[32m+[m[32m<?php[m
+[32m+[m
+[32m+[m[32mnamespace Database\Seeders;[m
+[32m+[m
+[32m+[m[32muse Illuminate\Database\Console\Seeds\WithoutModelEvents;[m
+[32m+[m[32muse Illuminate\Database\Seeder;[m
+[32m+[m[32muse App\Models\Product;[m
+[32m+[m[32muse Illuminate\Support\Facades\DB;[m
+[32m+[m[32muse Faker\Factory as Faker;[m
+[32m+[m
+[32m+[m[32mclass ProductSeeder extends Seeder[m
+[32m+[m[32m{[m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * Run the database seeds.[m
+[32m+[m[32m     */[m
+[32m+[m[32m    public function run(): void[m
+[32m+[m[32m    {[m
+[32m+[m[41m        [m
+[32m+[m[32m      DB::table('product')->truncate();[m
+[32m+[m[32m      $faker=Faker::create();[m
+[32m+[m
+[32m+[m[32m      for($i=0;$i<=30;$i++){[m
+[32m+[m[32m        $name=$faker->sentence(1);[m
+[32m+[m[32m        DB::table('product')->insert([[m
+[32m+[m[41m            [m
+[32m+[m[32m            'slug'=>strtolower($name),[m
+[32m+[m[32m            'product_name'=>$name,[m
+[32m+[m[32m            'description'=>$faker->sentence(20),[m
+[32m+[m[32m            'price'=>$faker->randomFloat(3,1,20),[m
+[32m+[m[32m            'created_at'=>date("Y-m-d")[m
+[32m+[m[32m        ]);[m
+[32m+[m
+[32m+[m
+[32m+[m[32m      }[m
+[32m+[m[41m        [m
+[32m+[m[41m  [m
+[32m+[m
+[32m+[m
+[32m+[m
+[32m+[m[32m    }[m
+[32m+[m[32m}[m

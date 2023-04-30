@@ -14,4 +14,14 @@ class Category extends Model
     // const update_at='yenilenme tarixi' bazada az-tr dilinde field adi yazanda onu laravel ucun tanitmaq lazim olanda istifadeedirik
     protected $guarded=[]; // bazaya hansisa fielda melumat yazdirmaq istemeyende ve ya qorunaya almaq isteyende
     
+
+    public function products(){
+
+
+        return $this->belongsToMany('App\Models\Product','product_name');
+        //nicat
+
+    }
+
+
 }

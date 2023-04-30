@@ -9,9 +9,13 @@ class CategoryController extends Controller
 {
     public function index($parent_id){
 
-        $category=Category::where('id',$parent_id)->orWhere('parent_id',$parent_id)->get();
+        $category=Category::where('id',$parent_id)->get();
         $subCategory=Category::where('parent_id',$parent_id)->get();
+        
+        $products=$category->products;
 
         return view('Frontend/Category',compact('subCategory','category'));
     }
+
+    
 }

@@ -4,8 +4,9 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use IlluminateApp\Models\Product;
+use App\Models\Product;
 use Illuminate\Support\Facades\DB;
+use Faker\Factory as Faker;
 
 class ProductSeeder extends Seeder
 {
@@ -14,16 +15,27 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
+        
+      DB::table('product')->truncate();
+      $faker=Faker::create();
 
-        DB::table('product')->truncate();
+      for($i=0;$i<=30;$i++){
+        $name=$faker->sentence(1);
         DB::table('product')->insert([
-
-            'product_name'=>'nicat',
-            'slug'=>'nicat',
-            'description'=>'cvgbhjnk',
-            'price'=>123.2,
-            'created_at'=>date("Y-m-d H:i:s")
             
+            'slug'=>strtolower($name),
+            'product_name'=>$name,
+            'description'=>$faker->sentence(20),
+            'price'=>$faker->randomFloat(3,1,20),
+            'created_at'=>date("Y-m-d")
         ]);
+
+
+      }
+        
+  
+
+
+
     }
 }
