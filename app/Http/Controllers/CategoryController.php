@@ -12,7 +12,7 @@ class CategoryController extends Controller
         $category=Category::where('id',$parent_id)->get();
         $subCategory=Category::where('parent_id',$parent_id)->get();
         
-        $products=$category->products;
+       // $products=$category->products;
 
         return view('Frontend/Category',compact('subCategory','category'));
     }

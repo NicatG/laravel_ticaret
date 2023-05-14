@@ -19,14 +19,7 @@ class Category extends Model
 
 
         return $this->belongsToMany('App\Models\Product','product_name');
-        //nicat
-        //racay
-        //Ruslan
-        //racay
-        //racay
-        //yeni
-        //yeni2013
-        //nicat update
+       
 
 
     }
