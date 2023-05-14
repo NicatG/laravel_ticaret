@@ -19,5 +19,7 @@ use App\Http\Controllers\BasketController;
 
 Route::get('/',[HomePageController::class,'index'])->name('index');
 Route::get('/category/{slug_categoryname}',[CategoryController::class,'index'])->name('category');
+
 Route::get('/product/{slug_productname}',[ProductController::class,'index'])->name('product');
+
 Route::get('basket',[BasketController::class,'index'])->name('basket');

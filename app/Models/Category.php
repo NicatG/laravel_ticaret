@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Category extends Model
 {
@@ -15,10 +16,10 @@ class Category extends Model
     protected $guarded=[]; // bazaya hansisa fielda melumat yazdirmaq istemeyende ve ya qorunaya almaq isteyende
     
 
-    public function products(){
+    public function product(){
 
 
-        return $this->belongsToMany('App\Models\Product','product_name');
+        return $this->belongsToMany(App\Models\Product::class,"product_category","category_id","product_id");
        
 
 
