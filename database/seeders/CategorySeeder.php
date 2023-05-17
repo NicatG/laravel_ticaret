@@ -14,7 +14,7 @@ class CategorySeeder extends Seeder
     public function run(): void
     { 
         
-        DB::table('category')->truncate();
+        //DB::table('category')->truncate();
 
         $name =['Smartfonlar','Tv-audio','Məişət Texnikası','Notbuklar','Smart Saatlar','Musiqi Alətləri'];
         $subcategory=['Samsung','Xiaomi','Iphone','Huawei'];

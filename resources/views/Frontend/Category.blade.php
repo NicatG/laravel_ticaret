@@ -47,7 +47,7 @@
                     <a href="#" class="btn btn-default">Yeni Ürünler</a>
                     <hr>
                     <div class="row">
-                        @foreach($category->roles as $value)
+                        @foreach($product1 as $value)
                         <div class="col-md-3 product">
                             <a href="#"><img src="http://lorempixel.com/400/400/food/1"></a>
                             <p><a href="#">{{$value['product_name']}}</a></p>
